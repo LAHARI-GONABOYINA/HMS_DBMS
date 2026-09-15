@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Management System | DBMS Cornerstone Project</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #f4f7fb;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+header {
+    background: linear-gradient(135deg, #0f4c81, #2563eb);
+    color: white;
+    padding: 75px 20px;
+    text-align: center;
+}
+
+header .hospital-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+header h1 {
+    font-size: 44px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 19px;
+    opacity: 0.95;
+}
+
+.header-tag {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 18px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 25px;
+    font-size: 14px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-title h2 {
+    font-size: 30px;
+    color: #0f4c81;
+    margin-bottom: 7px;
+}
+
+.section-title p {
+    color: #6b7280;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid #e5e7eb;
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+}
+
+.card .number {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.card .icon {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    color: #111827;
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+
+.card p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.status {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 5px 12px;
+    border-radius: 15px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.info-section {
+    margin-top: 65px;
+}
+
+.overview {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+    margin-bottom: 25px;
+}
+
+.overview h3 {
+    color: #0f4c81;
+    margin-bottom: 12px;
+}
+
+.overview p {
+    color: #4b5563;
+}
+
+.database-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.database-item {
+    background: #eef5ff;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    color: #0f4c81;
+    font-weight: 600;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background: rgba(0,0,0,0.68);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    width: 95%;
+    max-width: 720px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 35px;
+    border-radius: 20px;
+    position: relative;
+    animation: popup 0.25s ease;
+}
+
+@keyframes popup {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.close:hover {
+    color: #111827;
+}
+
+.modal-content h2 {
+    color: #0f4c81;
+    margin-bottom: 20px;
+    padding-right: 30px;
+}
+
+.modal-content h4 {
+    color: #2563eb;
+    margin-top: 18px;
+    margin-bottom: 7px;
+}
+
+.modal-content p {
+    color: #4b5563;
+    margin-bottom: 8px;
+}
+
+.modal-content ul {
+    margin: 8px 0 8px 22px;
+    color: #4b5563;
+}
+
+.modal-content li {
+    margin-bottom: 5px;
+}
+
+.code-box {
+    background: #111827;
+    color: #e5e7eb;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    overflow-x: auto;
+}
+
+.result-box {
+    background: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    padding: 14px;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+.warning-box {
+    background: #fff7ed;
+    border-left: 4px solid #f97316;
+    padding: 14px;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+.team {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.team span {
+    display: inline-block;
+    background: #eef5ff;
+    color: #0f4c81;
+    padding: 10px 18px;
+    border-radius: 20px;
+    margin: 5px;
+    font-weight: 600;
+}
+
+.key-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.key-table th {
+    background: #0f4c81;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.key-table td {
+    padding: 11px;
+    border: 1px solid #e5e7eb;
+    vertical-align: top;
+}
+
+.key-table tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.pk {
+    color: #166534;
+    font-weight: 600;
+}
+
+.fk {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+
+.er-diagram {
+    width: 100%;
+    max-width: 650px;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+footer {
+    background: #111827;
+    color: white;
+    text-align: center;
+    padding: 28px;
+    margin-top: 70px;
+}
+
+footer p {
+    margin: 4px;
+    opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 31px;
+    }
+
+    header p {
+        font-size: 16px;
+    }
+
+    .modal-content {
+        padding: 25px;
+    }
+
+    .key-table {
+        font-size: 12px;
+    }
+
+    .key-table th,
+    .key-table td {
+        padding: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="hospital-icon">🏥</div>
+    <h1>Hospital Management System</h1>
+    <p>Database Management System  Cornerstone Project</p>
+    <div class="header-tag">Oracle SQL Database Project</div>
+</header>
+
+<div class="container">
+
+    <div class="overview">
+        <h3>📌 Project Overview</h3>
+        <p>
+            A centralized Hospital Management System designed to organize
+            patient, doctor, department, appointment, medical record,
+            prescription, room and billing information using a relational database.
+        </p>
+
+        <div class="database-list">
+            <div class="database-item">Patients</div>
+            <div class="database-item">Doctors</div>
+            <div class="database-item">Departments</div>
+            <div class="database-item">Appointments</div>
+            <div class="database-item">Medical Records</div>
+            <div class="database-item">Prescriptions</div>
+            <div class="database-item">Rooms</div>
+            <div class="database-item">Bills</div>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <h2>📁 SQL Project Files</h2>
+        <p>Click a card to see exactly what was implemented.</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card" onclick="openModal('create')">
+            <div class="icon">🗄️</div>
+            <div class="number">FILE 01</div>
+            <h3>Create Tables</h3>
+            <p>Created the complete relational database structure.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('insert')">
+            <div class="icon">➕</div>
+            <div class="number">FILE 02</div>
+            <h3>Insert Data</h3>
+            <p>Inserted sample records into all eight tables.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('update')">
+            <div class="icon">✏️</div>
+            <div class="number">FILE 03</div>
+            <h3>Update Data</h3>
+            <p>Updated patient, doctor, appointment, room and bill data.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('delete')">
+            <div class="icon">🗑️</div>
+            <div class="number">FILE 04</div>
+            <h3>Delete Data</h3>
+            <p>Demonstrated safe deletion using a temporary patient.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('select')">
+            <div class="icon">🔍</div>
+            <div class="number">FILE 05</div>
+            <h3>Select Queries</h3>
+            <p>Retrieved hospital information using filtering and sorting.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('join')">
+            <div class="icon">🔗</div>
+            <div class="number">FILE 06</div>
+            <h3>Join Queries</h3>
+            <p>Combined information from related tables.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('aggregate')">
+            <div class="icon">📊</div>
+            <div class="number">FILE 07</div>
+            <h3>Aggregate Queries</h3>
+            <p>Performed statistical analysis using aggregate functions.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('subquery')">
+            <div class="icon">🧩</div>
+            <div class="number">FILE 08</div>
+            <h3>Subqueries</h3>
+            <p>Used nested queries for more advanced retrieval.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('constraint')">
+            <div class="icon">🛡️</div>
+            <div class="number">FILE 09</div>
+            <h3>Constraint Validation</h3>
+            <p>Tested database constraints using invalid data.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+        <div class="card" onclick="openModal('final')">
+            <div class="icon">⭐</div>
+            <div class="number">FILE 10</div>
+            <h3>Final Queries</h3>
+            <p>Combined database concepts into meaningful queries.</p>
+            <span class="status">✓ COMPLETED</span>
+        </div>
+
+    </div>
+
+    <div class="info-section">
+
+        <div class="section-title">
+            <h2>🧩 Database Design & Structure</h2>
+            <p>Explore the database design used in the project.</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card" onclick="openModal('er')">
+                <div class="icon">📐</div>
+                <h3>ER Diagram</h3>
+                <p>Entities and relationships of the hospital database.</p>
+            </div>
+
+            <div class="card" onclick="openModal('relationships')">
+                <div class="icon">🔄</div>
+                <h3>Relationships & Cardinality</h3>
+                <p>Shows how the database entities are connected.</p>
+            </div>
+
+            <div class="card" onclick="openModal('keys')">
+                <div class="icon">🔑</div>
+                <h3>Primary & Foreign Keys</h3>
+                <p>Shows identifiers and relationships between tables.</p>
+            </div>
+
+            <div class="card" onclick="openModal('schema')">
+                <div class="icon">🗂️</div>
+                <h3>Relational Schema</h3>
+                <p>Shows the eight relational database tables.</p>
+            </div>
+
+            <div class="card" onclick="openModal('integrity')">
+                <div class="icon">✅</div>
+                <h3>Constraints & Data Integrity</h3>
+                <p>Shows how invalid data is prevented.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="info-section">
+
+        <div class="section-title">
+            <h2>📋 Project Information</h2>
+            <p>Understand the purpose and outcome of the project.</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card" onclick="openModal('objectives')">
+                <div class="icon">🎯</div>
+                <h3>Objectives</h3>
+                <p>Goals of the Hospital Management System.</p>
+            </div>
+
+            <div class="card" onclick="openModal('problem')">
+                <div class="icon">⚠️</div>
+                <h3>Problem Statement</h3>
+                <p>Problems addressed by the database system.</p>
+            </div>
+
+            <div class="card" onclick="openModal('solution')">
+                <div class="icon">💡</div>
+                <h3>Solution</h3>
+                <p>The proposed centralized database solution.</p>
+            </div>
+
+            <div class="card" onclick="openModal('team')">
+                <div class="icon">👥</div>
+                <h3>Team Members</h3>
+                <p>Project team information.</p>
+            </div>
+
+            <div class="card" onclick="openModal('conclusion')">
+                <div class="icon">🏆</div>
+                <h3>Conclusion</h3>
+                <p>Final outcome of the database project.</p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<footer>
+    <p><strong>Hospital Management System</strong></p>
+    <p>DBMS Cornerstone Project | Department of AI & ML</p>
+</footer>
+
+<script>
+
+const data = {
+
+create: {
+    title: "FILE 01 – Create Tables",
+    body: `
+        <h4>What We Did</h4>
+        <p>Created the complete Oracle database structure for the Hospital Management System.</p>
+
+        <h4>Tables Created</h4>
+        <ul>
+            <li>Patients</li>
+            <li>Doctors</li>
+            <li>Departments</li>
+            <li>Appointments</li>
+            <li>Medical Records</li>
+            <li>Prescriptions</li>
+            <li>Rooms</li>
+            <li>Bills</li>
+        </ul>
+
+        <h4>Database Concepts Used</h4>
+        <p>Primary Key, Foreign Key, NOT NULL, UNIQUE and CHECK constraints.</p>
+
+        <div class="code-box">01_Create_Tables.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> All 8 tables were created successfully in Oracle.
+        </div>
+    `
+},
+
+insert: {
+    title: "FILE 02 – Insert Data",
+    body: `
+        <h4>What We Did</h4>
+        <p>Inserted sample hospital records into all eight database tables.</p>
+
+        <h4>Data Added</h4>
+        <ul>
+            <li>Departments</li>
+            <li>Patients</li>
+            <li>Doctors</li>
+            <li>Rooms</li>
+            <li>Appointments</li>
+            <li>Medical Records</li>
+            <li>Prescriptions</li>
+            <li>Bills</li>
+        </ul>
+
+        <h4>Database Concept Used</h4>
+        <p>INSERT statement and COMMIT.</p>
+
+        <div class="code-box">02_Insert_Data.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> Sample data was inserted into the database successfully.
+        </div>
+    `
+},
+
+update: {
+    title: "FILE 03 – Update Data",
+    body: `
+        <h4>What We Did</h4>
+        <p>Modified existing hospital records using UPDATE statements.</p>
+
+        <h4>Updates Performed</h4>
+        <ul>
+            <li>Updated patient phone number</li>
+            <li>Updated doctor phone number</li>
+            <li>Changed appointment status to Completed</li>
+            <li>Changed room status to Occupied</li>
+            <li>Changed bill payment status to Paid</li>
+            <li>Updated a bill amount</li>
+        </ul>
+
+        <h4>Database Concept Used</h4>
+        <p>UPDATE and COMMIT.</p>
+
+        <div class="code-box">03_Update_Data.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> Existing records were modified successfully.
+        </div>
+    `
+},
+
+delete: {
+    title: "FILE 04 – Delete Data",
+    body: `
+        <h4>What We Did</h4>
+        <p>Created a temporary patient record and then deleted it.</p>
+
+        <h4>Purpose</h4>
+        <p>This safely demonstrates the DELETE operation without removing actual project data.</p>
+
+        <h4>Database Concepts Used</h4>
+        <p>INSERT, DELETE and COMMIT.</p>
+
+        <div class="code-box">04_Delete_Data.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> The temporary patient record was deleted successfully.
+        </div>
+    `
+},
+
+select: {
+    title: "FILE 05 – Select Queries",
+    body: `
+        <h4>What We Did</h4>
+        <p>Created retrieval queries to display useful information from the database.</p>
+
+        <h4>Queries Include</h4>
+        <ul>
+            <li>All patients</li>
+            <li>All doctors</li>
+            <li>Specific patient details</li>
+            <li>Doctors by specialization</li>
+            <li>Female patients</li>
+            <li>Available rooms</li>
+            <li>Completed appointments</li>
+            <li>Patients sorted by date of birth</li>
+            <li>Rooms sorted by daily charge</li>
+            <li>Pending bills</li>
+        </ul>
+
+        <h4>Concepts Used</h4>
+        <p>SELECT, WHERE and ORDER BY.</p>
+
+        <div class="code-box">05_Select_Queries.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> Required records can be retrieved and filtered from the database.
+        </div>
+    `
+},
+
+join: {
+    title: "FILE 06 – Join Queries",
+    body: `
+        <h4>What We Did</h4>
+        <p>Combined information from multiple related tables.</p>
+
+        <h4>Joins Implemented</h4>
+        <ul>
+            <li>Patients + Appointments</li>
+            <li>Doctors + Departments</li>
+            <li>Patients + Medical Records</li>
+            <li>Patients + Doctors + Appointments</li>
+            <li>Departments + Rooms</li>
+            <li>Patients + Bills + Rooms</li>
+            <li>Patients + Medical Records + Prescriptions</li>
+        </ul>
+
+        <h4>Concepts Used</h4>
+        <p>JOIN and LEFT JOIN.</p>
+
+        <div class="code-box">06_Join_Queries.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> Related information from multiple tables can be viewed together.
+        </div>
+    `
+},
+
+aggregate: {
+    title: "FILE 07 – Aggregate Queries",
+    body: `
+        <h4>What We Did</h4>
+        <p>Created analytical queries to summarize hospital data.</p>
+
+        <h4>Functions Used</h4>
+        <ul>
+            <li>COUNT – count records</li>
+            <li>SUM – calculate total amounts</li>
+            <li>AVG – calculate average values</li>
+            <li>MAX – find highest value</li>
+            <li>MIN – find lowest value</li>
+            <li>GROUP BY – group related results</li>
+        </ul>
+
+        <h4>Examples</h4>
+        <p>Total patients, total doctors, total bill amount, average bill, highest bill, lowest bill and appointments by status.</p>
+
+        <div class="code-box">07_Aggregate_Queries.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> Hospital data can be summarized and analyzed using SQL.
+        </div>
+    `
+},
+
+subquery: {
+    title: "FILE 08 – Subqueries",
+    body: `
+        <h4>What We Did</h4>
+        <p>Created nested queries where the result of one query is used by another query.</p>
+
+        <h4>Subqueries Implemented</h4>
+        <ul>
+            <li>Patients who have appointments</li>
+            <li>Doctors who have appointments</li>
+            <li>Patients with bills above average</li>
+            <li>Highest bill</li>
+            <li>Doctors in Cardiology</li>
+            <li>Patients who have medical records</li>
+            <li>Rooms above average charge</li>
+            <li>Patients with pending bills</li>
+        </ul>
+
+        <h4>Concepts Used</h4>
+        <p>IN, AVG and MAX with nested SELECT statements.</p>
+
+        <div class="code-box">08_Subqueries.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> Complex conditions can be handled using subqueries.
+        </div>
+    `
+},
+
+constraint: {
+    title: "FILE 09 – Constraint Validation",
+    body: `
+        <h4>What We Did</h4>
+        <p>Tested whether the database correctly rejects invalid data.</p>
+
+        <h4>Constraints Tested</h4>
+        <ul>
+            <li>Primary Key – duplicate patient ID</li>
+            <li>Unique – duplicate phone number</li>
+            <li>NOT NULL – missing first name</li>
+            <li>CHECK – invalid gender</li>
+            <li>Foreign Key – invalid department ID</li>
+            <li>CHECK – invalid room type</li>
+            <li>CHECK – negative room charge</li>
+            <li>CHECK – invalid appointment status</li>
+            <li>CHECK – negative bill amount</li>
+            <li>CHECK – invalid payment method</li>
+            <li>CHECK – invalid payment status</li>
+        </ul>
+
+        <div class="code-box">09_Constraint_Validation.sql</div>
+
+        <div class="warning-box">
+            <strong>Expected behavior:</strong> Oracle rejects the invalid records and displays constraint violation errors.
+        </div>
+
+        <div class="result-box">
+            <strong>✓ Purpose:</strong> Demonstrates data integrity and prevents invalid records.
+        </div>
+    `
+},
+
+final: {
+    title: "FILE 10 – Final Queries",
+    body: `
+        <h4>What We Did</h4>
+        <p>Created final practical queries that combine multiple database concepts.</p>
+
+        <h4>Final Queries Include</h4>
+        <ul>
+            <li>Patient appointment details</li>
+            <li>Patient medical record details</li>
+            <li>Doctor and department details</li>
+            <li>Available room details</li>
+            <li>Patient bill details</li>
+            <li>Pending bills</li>
+            <li>Patient prescription details</li>
+            <li>Total bill amount by payment status</li>
+            <li>Doctors with number of appointments</li>
+            <li>Patients with pending bills above average</li>
+        </ul>
+
+        <h4>Concepts Combined</h4>
+        <p>JOIN, LEFT JOIN, WHERE, ORDER BY, GROUP BY, COUNT, SUM and subqueries.</p>
+
+        <div class="code-box">10_Final_Queries.sql</div>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> The completed database can provide meaningful hospital information.
+        </div>
+    `
+},
+
+er: {
+    title: "ER Diagram",
+    body: `
+        <h4>Hospital Management System ER Diagram</h4>
+
+        <img
+            src="er-diagram.png"
+            alt="Hospital Management System ER Diagram"
+            class="er-diagram"
+        >
+
+        <h4>Entities</h4>
+
+        <p>
+            Patient, Doctor, Department, Appointment, Medical Record,
+            Prescription, Room and Bill.
+        </p>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong>
+            The ER diagram shows the entities, attributes, keys and relationships
+            used in the Hospital Management System.
+        </div>
+    `
+},
+
+relationships: {
+    title: "Relationships & Cardinality",
+    body: `
+        <h4>Relationships Used</h4>
+        <ul>
+            <li>Department → Doctor : 1:M</li>
+            <li>Department → Room : 1:M</li>
+            <li>Patient → Appointment : 1:M</li>
+            <li>Doctor → Appointment : 1:M</li>
+            <li>Patient → Medical Record : 1:M</li>
+            <li>Doctor → Medical Record : 1:M</li>
+            <li>Medical Record → Prescription : 1:M</li>
+            <li>Patient → Prescription : 1:M</li>
+            <li>Doctor → Prescription : 1:M</li>
+            <li>Patient → Bill : 1:M</li>
+            <li>Appointment → Bill : 1:1</li>
+            <li>Room → Bill : 1:M</li>
+        </ul>
+
+        <p>These relationships connect the database tables according to the hospital system design.</p>
+    `
+},
+
+keys: {
+    title: "Primary & Foreign Keys",
+    body: `
+        <h4>Keys Used in the Database</h4>
+
+        <p>
+            Primary keys uniquely identify each record, while foreign keys
+            connect related tables and maintain referential integrity.
+        </p>
+
+        <table class="key-table">
+            <thead>
+                <tr>
+                    <th>Entity</th>
+                    <th>Primary Key</th>
+                    <th>Foreign Key(s)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td><strong>PATIENT</strong></td>
+                    <td class="pk">patient_id</td>
+                    <td>—</td>
+                </tr>
+
+                <tr>
+                    <td><strong>DOCTOR</strong></td>
+                    <td class="pk">doctor_id</td>
+                    <td class="fk">department_id → DEPARTMENT(department_id)</td>
+                </tr>
+
+                <tr>
+                    <td><strong>DEPARTMENT</strong></td>
+                    <td class="pk">department_id</td>
+                    <td>—</td>
+                </tr>
+
+                <tr>
+                    <td><strong>APPOINTMENT</strong></td>
+                    <td class="pk">appointment_id</td>
+                    <td class="fk">
+                        patient_id → PATIENT(patient_id)<br>
+                        doctor_id → DOCTOR(doctor_id)
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>MEDICAL_RECORD</strong></td>
+                    <td class="pk">record_id</td>
+                    <td class="fk">
+                        patient_id → PATIENT(patient_id)<br>
+                        doctor_id → DOCTOR(doctor_id)
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>PRESCRIPTION</strong></td>
+                    <td class="pk">prescription_id</td>
+                    <td class="fk">
+                        patient_id → PATIENT(patient_id)<br>
+                        doctor_id → DOCTOR(doctor_id)<br>
+                        record_id → MEDICAL_RECORD(record_id)
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>ROOM</strong></td>
+                    <td class="pk">room_id</td>
+                    <td class="fk">
+                        department_id → DEPARTMENT(department_id)
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>BILL</strong></td>
+                    <td class="pk">bill_id</td>
+                    <td class="fk">
+                        patient_id → PATIENT(patient_id)<br>
+                        appointment_id → APPOINTMENT(appointment_id)<br>
+                        room_id → ROOM(room_id)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="result-box">
+            <strong>✓ Purpose:</strong> Keys uniquely identify records and establish relationships between tables.
+        </div>
+    `
+},
+
+schema: {
+    title: "Relational Database Schema",
+    body: `
+        <h4>Eight Relational Tables</h4>
+        <ul>
+            <li>PATIENTS</li>
+            <li>DOCTORS</li>
+            <li>DEPARTMENTS</li>
+            <li>APPOINTMENTS</li>
+            <li>MEDICAL_RECORDS</li>
+            <li>PRESCRIPTIONS</li>
+            <li>ROOMS</li>
+            <li>BILLS</li>
+        </ul>
+
+        <h4>Purpose</h4>
+        <p>The schema organizes hospital information into related tables and reduces unnecessary duplication.</p>
+    `
+},
+
+integrity: {
+    title: "Constraints & Data Integrity",
+    body: `
+        <h4>Constraints Implemented</h4>
+        <ul>
+            <li>PRIMARY KEY</li>
+            <li>FOREIGN KEY</li>
+            <li>UNIQUE</li>
+            <li>NOT NULL</li>
+            <li>CHECK</li>
+        </ul>
+
+        <h4>Purpose</h4>
+        <p>Constraints ensure that the stored hospital data follows defined rules and relationships.</p>
+
+        <div class="result-box">
+            <strong>✓ Result:</strong> Invalid values are rejected by Oracle, helping maintain data integrity.
+        </div>
+    `
+},
+
+objectives: {
+    title: "Project Objectives",
+    body: `
+        <ul>
+            <li>Store hospital information in a structured manner.</li>
+            <li>Reduce data redundancy and improve accuracy.</li>
+            <li>Maintain data consistency and integrity.</li>
+            <li>Support CRUD operations.</li>
+            <li>Provide useful information through SQL queries.</li>
+            <li>Organize patient, doctor, appointment, medical and billing information.</li>
+        </ul>
+    `
+},
+
+problem: {
+    title: "Problem Statement",
+    body: `
+        <p>
+            Manual hospital record management can make searching and maintaining
+            patient information time-consuming. Appointment conflicts and scattered
+            doctor and department information can also make management difficult.
+        </p>
+    `
+},
+
+solution: {
+    title: "Proposed Solution",
+    body: `
+        <p>
+            The Hospital Management System uses a centralized relational database
+            to organize patient, doctor, department, appointment, medical record,
+            prescription, room and billing information.
+        </p>
+
+        <h4>Benefits</h4>
+        <ul>
+            <li>Structured data storage</li>
+            <li>Reduced redundancy</li>
+            <li>Improved consistency</li>
+            <li>Data integrity through constraints</li>
+            <li>Easy information retrieval using SQL</li>
+        </ul>
+    `
+},
+
+team: {
+    title: "Team Members",
+    body: `
+        <p>
+            This project was developed as a team project under the Department of AI & ML.
+        </p>
+
+        <div class="team">
+            <span>B. Lalitha</span>
+            <span>G. Lahari</span>
+            <span>D. Dhaneswari</span>
+        </div>
+    `
+},
+
+conclusion: {
+    title: "Conclusion",
+    body: `
+        <p>
+            The Hospital Management System demonstrates how a relational database
+            can organize hospital information, maintain data integrity and provide
+            meaningful information through SQL queries.
+        </p>
+
+        <div class="result-box">
+            <strong>🏆 Project Outcome:</strong>
+            A complete Oracle SQL database with table creation, data manipulation,
+            retrieval, joins, aggregation, subqueries and constraint validation.
+        </div>
+    `
+}
+
+};
+
+function openModal(type) {
+    document.getElementById("modalTitle").innerHTML = data[type].title;
+    document.getElementById("modalBody").innerHTML = data[type].body;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById("modal");
+
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+};
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});
+
+</script>
+
+</body>
+</html>

@@ -35,11 +35,11 @@ The system contains 8 entities:
 
 - ## 👥 Team Responsibilities
 
-| Team Member | Role / Responsibility | SQL Files |
+| Team Member  | Role / Responsibility | SQL Files |
 |---|---|---|
-| **G. Lahari** | Team Lead, Database Design, Table Creation, Constraint Validation and Final Queries | `01_Create_Tables.sql`, `09_Constraint_Validation.sql`, `10_Final_Queries.sql` |
-| **B. Lalitha** | Data Manipulation Operations | `02_Insert_Data.sql`, `03_Update_Data.sql`, `04_Delete_Data.sql` |
-| **D. Dhaneswari** | Data Retrieval and Analysis | `05_Select_Queries.sql`, `06_Join_Queries.sql`, `07_Aggregate_Queries.sql`, `08_Subqueries.sql` |
+| **G. Lahari**  | Database Design, Table Creation, Constraint Validation and Final Queries | `01_Create_Tables.sql`, `09_Constraint_Validation.sql`, `10_Final_Queries.sql` |
+| **B. Lalitha**  | Data Manipulation Operations | `02_Insert_Data.sql`, `03_Update_Data.sql`, `04_Delete_Data.sql` |
+| **D. Dhaneswari**  | Data Retrieval and Analysis | `05_Select_Queries.sql`, `06_Join_Queries.sql`, `07_Aggregate_Queries.sql`, `08_Subqueries.sql` |
 
 ## 📁 Project Structure
 

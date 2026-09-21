@@ -108,3 +108,48 @@ AND b.amount > (
     SELECT AVG(amount)
     FROM bills
 );
+
+
+CREATE OR REPLACE VIEW patient_doctor_view AS
+SELECT p.patient_id,
+       p.first_name AS patient_name,
+       d.doctor_id,
+       d.first_name AS doctor_name,
+       d.specialization
+FROM patients p
+JOIN appointments a ON p.patient_id = a.patient_id
+JOIN doctors d ON a.doctor_id = d.doctor_id;
+
+SELECT * FROM patient_doctor_view;
+
+
+SELECT first_name, last_name
+FROM patients
+UNION
+SELECT first_name, last_name
+FROM doctors;
+
+
+SELECT patient_id
+FROM appointments
+INTERSECT
+SELECT patient_id
+FROM medical_records;
+
+SELECT patient_id
+FROM patients
+MINUS
+SELECT patient_id
+FROM appointments;
+
+CREATE OR REPLACE VIEW department_patient_count AS
+SELECT d.department_id,
+       d.department_name,
+       COUNT(p.patient_id) AS patient_count
+FROM departments d
+JOIN doctors doc ON d.department_id = doc.department_id
+LEFT JOIN appointments a ON doc.doctor_id = a.doctor_id
+LEFT JOIN patients p ON a.patient_id = p.patient_id
+GROUP BY d.department_id, d.department_name;
+
+SELECT * FROM department_patient_count;
